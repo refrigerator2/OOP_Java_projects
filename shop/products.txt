@@ -1,0 +1,16 @@
+[food]
+bread
+egg
+yogurt
+tomato
+potato
+chicken
+[furniture]
+table
+chair
+mirror
+[tech]
+phone
+PC
+laptop
+mouse

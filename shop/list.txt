@@ -1,0 +1,8 @@
+[food]
+chicken
+bread
+[furniture]
+mirror
+[tech]
+PC
+laptop
