@@ -3,32 +3,34 @@ import java.net.*;
 import java.util.Scanner;
 
 public class Client {
-  public static void main(String args[]) throws IOException 
-  {
-    Socket socket;
-    try{
-      socket  = new Socket("localhost", 9090);
+  private static final int PORT = 5000;
+  private static final String host = "localhost";
+
+  public static void main(String args[]) {
+
+    try (Socket socket = new Socket(host, PORT);
+        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        Scanner sc = new Scanner(System.in)) {
+
+      ServerListener listener = new ServerListener(in);
+      new Thread(listener).start();
+
+      InputUtils inputUtils = new InputUtils(sc);
+
+      System.out.println("Connected to server.");
+
+      while (listener.isRunning()) {
+        Message msg = inputUtils.getInput();
+
+        if (!listener.isRunning())
+          break;
+
+        out.println(msg.toString());
+      }
+
+    } catch (IOException e) {
+      System.err.println("Client error: " + e.getMessage());
     }
-    catch(IOException e){
-      System.out.println(e);
-      return;
-    }
-    Scanner sc = new Scanner(System.in);
-    Message msg = getInput(sc); 
-    PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-    BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
-    out.println(msg.toString());
-
-    String response = in.readLine();
-    System.out.println("Server says: " + response);
-
-    socket.close();
-  }
-  public static Message getInput(Scanner sc){
-    System.out.println("Enter message to server: ");
-    String msg = sc.nextLine();
-    Message res = new Message(msg);
-    return res;
   }
 }

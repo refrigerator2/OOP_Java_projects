@@ -1,15 +1,10 @@
-import java.time.LocalDateTime;
-import java.time.format.*;
-
 class Message {
   private final String msg;
   private final String time;
 
-  public Message(String msg) {
+  public Message(String msg, String time) {
     this.msg = msg;
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    LocalDateTime now = LocalDateTime.now();
-    this.time = now.format(formatter);
+    this.time = time;
   }
 
   public String toString() {

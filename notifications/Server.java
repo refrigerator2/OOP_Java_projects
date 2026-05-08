@@ -1,24 +1,24 @@
 import java.io.*;
 import java.net.*;
+import java.util.concurrent.*;
 
 public class Server {
-    public static void main(String args[]) throws IOException 
-    {
-        ServerSocket serverSocket = new ServerSocket(9090);
-        System.out.println("Server is running and waiting for client connection...");
+  private static final int PORT = 5000;
+  private static final int threads = 10;
+  private static final ExecutorService connectionPool = Executors.newFixedThreadPool(threads);
+  private static final ScheduledExecutorService notificationScheduler = Executors.newScheduledThreadPool(threads);
 
+  public static void main(String[] args) {
+    try (ServerSocket serverSocket = new ServerSocket(PORT)) {
+      System.out.println("Server is on port: " + PORT);
+
+      while (true) {
         Socket clientSocket = serverSocket.accept();
-        System.out.println("Client connected!");
-
-        BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-        PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-
-        String message = in.readLine();
-        System.out.println("Client says: " + message);
-
-        out.println("Message received by the server.");
-
-        clientSocket.close();
-        serverSocket.close();
+        System.out.println("New client connected: " + clientSocket.getInetAddress());
+        connectionPool.execute(new ClientHandler(clientSocket, notificationScheduler));
+      }
+    } catch (IOException e) {
+      System.err.println("Server error: " + e.getMessage());
     }
+  }
 }
