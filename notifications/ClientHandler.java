@@ -24,7 +24,7 @@ public class ClientHandler implements Runnable {
         try {
           String[] parts = input.split("\\|");
           String message = parts[0];
-          System.out.println(parts[1]);
+          //System.out.println(parts[1]);
           LocalDateTime targetTime = LocalDateTime.parse(parts[1], formatter);
 
           long delay = Duration.between(LocalDateTime.now(), targetTime).toSeconds();
