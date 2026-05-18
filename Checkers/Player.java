@@ -45,18 +45,19 @@ public class Player {
     board.setPlayersChecks(checks, startRow, endRow);
   }
 
-  public void moveCheck(int fromX, int fromY, int toX, int toY) {
+  public boolean moveCheck(int fromX, int fromY, int toX, int toY) {
     Checker check = getCheckerByPos(fromX, fromY);
+    Checker toCheck = getCheckerByPos(toX, toY);
     if (check == null) {
       System.out.println("You dont have checker here");
-      return;
+      return false;
     } else if (!board.checkerCanBeHere(toX, toY)) {
       System.out.println("You cant move here");
-      return;
-    } else if (getCheckerByPos(toX, toY) != null) {
-      System.out.println("Tile is taken by one of your checkers");
-      return;
+      return false;
+    } else if (toCheck != null) {
+      System.out.println("Tile is taken by one of your checkers: ");
+      return false;
     }
-    board.moveChecker(check, toX, toY);
+    return board.moveChecker(check, toX, toY);
   }
 }
