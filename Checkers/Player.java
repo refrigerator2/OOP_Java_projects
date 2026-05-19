@@ -46,10 +46,14 @@ public class Player {
   }
 
   public boolean moveCheck(int fromX, int fromY, int toX, int toY) {
+    int dirY = isBlackChecks ? -1 : 1;
     Checker check = getCheckerByPos(fromX, fromY);
     Checker toCheck = getCheckerByPos(toX, toY);
     if (check == null) {
       System.out.println("You dont have checker here");
+      return false;
+    } else if ((toY - fromY < dirY && !isBlackChecks) || (toY - fromY > dirY && isBlackChecks)) {
+      System.out.println("Cant go here");
       return false;
     } else if (!board.checkerCanBeHere(toX, toY)) {
       System.out.println("You cant move here");
@@ -58,6 +62,6 @@ public class Player {
       System.out.println("Tile is taken by one of your checkers: ");
       return false;
     }
-    return board.moveChecker(check, toX, toY);
+    return board.moveChecker(check, toX, toY, dirY);
   }
 }

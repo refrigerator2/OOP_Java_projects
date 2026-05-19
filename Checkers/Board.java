@@ -155,7 +155,7 @@ public class Board {
     t.setCheck(null);
   }
 
-  public boolean moveChecker(Checker ch, int toX, int toY) {
+  public boolean moveChecker(Checker ch, int toX, int toY, int dirY) {
     if (!pointInBorders(toX, toY)) {
       System.out.println("Coordinates are out of bounds!");
       return false;
